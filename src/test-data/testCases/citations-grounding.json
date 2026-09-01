@@ -1,0 +1,102 @@
+{
+  "category": "citations-grounding",
+  "description": "Golden test cases verifying Grounding & Citation Alignment (Spec Rule 3: Every factual claim should be supported by a cited document, and citations must point to the document that actually supports the claim)",
+  "testCases": [
+    {
+      "id": "TC-CITE-001",
+      "category": "grounding",
+      "title": "Exact citation matching for Americas Travel Policy (D-001)",
+      "description": "Americas travel expense query must return USD 75 and cite exactly ['D-001'].",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the daily meal allowance for travel?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-001"],
+        "forbiddenCitations": ["D-002", "D-003", "D-004", "D-005"],
+        "expectedKeywords": ["USD 75", "25"]
+      }
+    },
+    {
+      "id": "TC-CITE-002",
+      "category": "grounding",
+      "title": "EMEA Travel Query must cite D-002 (zero citation drift to D-001)",
+      "description": "EMEA travel expense query must return EUR 60 and cite ['D-002']. Must NOT cite D-001.",
+      "priority": "P1",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "What is the daily meal allowance when I travel in EMEA?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-002"],
+        "forbiddenCitations": ["D-001"],
+        "expectedKeywords": ["EUR 60", "30"]
+      },
+      "relatedDefectId": "DEF-004"
+    },
+    {
+      "id": "TC-CITE-003",
+      "category": "grounding",
+      "title": "Remote work claim must cite active policy D-004 (zero drift to retired D-005)",
+      "description": "Query regarding working remotely must cite active document D-004 and assert 3 days/week.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "How many days can employees work from home per week?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-004"],
+        "forbiddenCitations": ["D-005"],
+        "expectedKeywords": ["3 days", "manager approval"]
+      },
+      "relatedDefectId": "DEF-001"
+    },
+    {
+      "id": "TC-CITE-004",
+      "category": "grounding",
+      "title": "Engineering data policy must cite exactly D-006",
+      "description": "Production data query from Engineering user must cite D-006 with sandbox and team-lead approval claims.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Engineering",
+      "question": "What are the rules regarding production data copies?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-006"],
+        "expectedKeywords": ["sandbox", "team-lead approval", "must not be copied to local machines"]
+      }
+    },
+    {
+      "id": "TC-CITE-005",
+      "category": "grounding",
+      "title": "Finance procurement thresholds must cite exactly D-008",
+      "description": "Finance user procurement query must cite D-008 with VP $10k and CFO $50k sign-off rules.",
+      "priority": "P1",
+      "region": "EMEA",
+      "role": "Finance",
+      "question": "What are the purchase threshold levels requiring VP and CFO approval?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-008"],
+        "expectedKeywords": ["10000", "50000", "VP", "CFO"]
+      }
+    },
+    {
+      "id": "TC-CITE-006",
+      "category": "grounding",
+      "title": "Manager compensation review must cite exactly D-007",
+      "description": "Manager user compensation cycle query must cite D-007 with Q1 and 4% budget claims.",
+      "priority": "P1",
+      "region": "APAC",
+      "role": "Manager",
+      "question": "When does the compensation review run and what is the discretionary percentage?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-007"],
+        "expectedKeywords": ["Q1", "4%"]
+      },
+      "relatedDefectId": "DEF-002"
+    }
+  ]
+}

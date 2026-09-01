@@ -1,0 +1,203 @@
+{
+  "description": "Source of truth for UI Document Scoping Panel ('Documents visible to you') and UI Automation test cases across all 12 Region x Role combinations",
+  "scopingMatrix": [
+    {
+      "region": "Americas",
+      "role": "Employee",
+      "audience": "All Staff",
+      "expectedCount": 2,
+      "expectedDocIds": ["D-001", "D-004"],
+      "expectedDocs": [
+        { "doc_id": "D-001", "title": "Travel and Expense Policy (Americas)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "Americas",
+      "role": "Engineering",
+      "audience": "Engineering",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-001", "D-004", "D-006"],
+      "expectedDocs": [
+        { "doc_id": "D-001", "title": "Travel and Expense Policy (Americas)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-006", "title": "Production Data Handling Standard", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "Americas",
+      "role": "Finance",
+      "audience": "Finance",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-001", "D-004", "D-008"],
+      "expectedDocs": [
+        { "doc_id": "D-001", "title": "Travel and Expense Policy (Americas)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-008", "title": "Procurement Approval Thresholds", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "Americas",
+      "role": "Manager",
+      "audience": "Managers",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-001", "D-004", "D-007"],
+      "expectedDocs": [
+        { "doc_id": "D-001", "title": "Travel and Expense Policy (Americas)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-007", "title": "Compensation Review Process", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "EMEA",
+      "role": "Employee",
+      "audience": "All Staff",
+      "expectedCount": 2,
+      "expectedDocIds": ["D-002", "D-004"],
+      "expectedDocs": [
+        { "doc_id": "D-002", "title": "Travel and Expense Policy (EMEA)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "EMEA",
+      "role": "Engineering",
+      "audience": "Engineering",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-002", "D-004", "D-006"],
+      "expectedDocs": [
+        { "doc_id": "D-002", "title": "Travel and Expense Policy (EMEA)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-006", "title": "Production Data Handling Standard", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "EMEA",
+      "role": "Finance",
+      "audience": "Finance",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-002", "D-004", "D-008"],
+      "expectedDocs": [
+        { "doc_id": "D-002", "title": "Travel and Expense Policy (EMEA)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-008", "title": "Procurement Approval Thresholds", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "EMEA",
+      "role": "Manager",
+      "audience": "Managers",
+      "expectedCount": 3,
+      "expectedDocIds": ["D-002", "D-004", "D-007"],
+      "expectedDocs": [
+        { "doc_id": "D-002", "title": "Travel and Expense Policy (EMEA)", "state": "Approved" },
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-007", "title": "Compensation Review Process", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "APAC",
+      "role": "Employee",
+      "audience": "All Staff",
+      "expectedCount": 1,
+      "expectedDocIds": ["D-004"],
+      "expectedDocs": [
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "APAC",
+      "role": "Engineering",
+      "audience": "Engineering",
+      "expectedCount": 2,
+      "expectedDocIds": ["D-004", "D-006"],
+      "expectedDocs": [
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-006", "title": "Production Data Handling Standard", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "APAC",
+      "role": "Finance",
+      "audience": "Finance",
+      "expectedCount": 2,
+      "expectedDocIds": ["D-004", "D-008"],
+      "expectedDocs": [
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-008", "title": "Procurement Approval Thresholds", "state": "Approved" }
+      ]
+    },
+    {
+      "region": "APAC",
+      "role": "Manager",
+      "audience": "Managers",
+      "expectedCount": 2,
+      "expectedDocIds": ["D-004", "D-007"],
+      "expectedDocs": [
+        { "doc_id": "D-004", "title": "Remote Work Policy", "state": "Approved" },
+        { "doc_id": "D-007", "title": "Compensation Review Process", "state": "Approved" }
+      ]
+    }
+  ],
+  "lifecycleExclusions": {
+    "forbiddenDocIds": ["D-009", "D-003", "D-005"],
+    "contexts": [
+      { "region": "Americas", "role": "Employee" },
+      { "region": "Americas", "role": "Engineering" },
+      { "region": "EMEA", "role": "Finance" },
+      { "region": "APAC", "role": "Manager" }
+    ]
+  },
+  "regionalBoundaries": [
+    {
+      "id": "UI-REG-001",
+      "region": "Americas",
+      "role": "Employee",
+      "title": "Americas user sees D-001 (Americas T&E) and not D-002 (EMEA T&E)",
+      "expectedContains": ["D-001"],
+      "expectedNotContains": ["D-002"]
+    },
+    {
+      "id": "UI-REG-002",
+      "region": "EMEA",
+      "role": "Employee",
+      "title": "EMEA user sees D-002 (EMEA T&E) and not D-001 (Americas T&E)",
+      "expectedContains": ["D-002"],
+      "expectedNotContains": ["D-001"]
+    },
+    {
+      "id": "UI-REG-003",
+      "region": "APAC",
+      "role": "Employee",
+      "title": "APAC user sees neither D-001 nor D-002",
+      "expectedContains": [],
+      "expectedNotContains": ["D-001", "D-002"]
+    }
+  ],
+  "rbacBoundaries": [
+    {
+      "id": "UI-RBAC-001",
+      "region": "Americas",
+      "initialRole": "Employee",
+      "targetRole": "Engineering",
+      "targetDocId": "D-006",
+      "title": "Engineering role sees D-006 (Production Data Standard) while Employee does not"
+    },
+    {
+      "id": "UI-RBAC-002",
+      "region": "Americas",
+      "initialRole": "Employee",
+      "targetRole": "Finance",
+      "targetDocId": "D-008",
+      "title": "Finance role sees D-008 (Procurement Thresholds) while Employee does not"
+    },
+    {
+      "id": "UI-RBAC-003",
+      "region": "Americas",
+      "initialRole": "Employee",
+      "targetRole": "Manager",
+      "targetDocId": "D-007",
+      "title": "Manager role sees D-007 (Compensation Process) while Employee does not"
+    }
+  ]
+}

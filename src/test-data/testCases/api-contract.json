@@ -1,0 +1,90 @@
+{
+  "category": "api-contract",
+  "description": "Test cases verifying OpenAPI 3.0.3 schema conformance, header requirements, and HTTP response contracts",
+  "endpoints": {
+    "query": "/query",
+    "documents": "/documents"
+  },
+  "testCases": [
+    {
+      "id": "TC-API-001",
+      "category": "contract",
+      "title": "Missing X-User-Region and X-User-Role headers in /query",
+      "description": "According to openApi.json, X-User-Region and X-User-Role are required headers.",
+      "priority": "P2",
+      "request": {
+        "headers": {},
+        "body": {
+          "question": "What is my daily meal allowance when I travel?"
+        }
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      },
+      "relatedDefectId": "DEF-006"
+    },
+    {
+      "id": "TC-API-002",
+      "category": "contract",
+      "title": "Invalid enum value for headers in /query",
+      "description": "Invalid region 'Mars' and role 'Hacker' should be rejected as invalid schema.",
+      "priority": "P2",
+      "request": {
+        "headers": {
+          "X-User-Region": "Mars",
+          "X-User-Role": "Hacker"
+        },
+        "body": {
+          "question": "What is my daily meal allowance when I travel?"
+        }
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      },
+      "relatedDefectId": "DEF-006"
+    },
+    {
+      "id": "TC-API-003",
+      "category": "contract",
+      "title": "Missing question field in request body",
+      "description": "Sending an empty JSON body {} without required 'question' property.",
+      "priority": "P2",
+      "request": {
+        "headers": {
+          "X-User-Region": "Americas",
+          "X-User-Role": "Employee"
+        },
+        "body": {
+          "question": ""
+        }
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    },
+    {
+      "id": "TC-API-004",
+      "category": "contract",
+      "title": "GET /documents backend access scoping check",
+      "description": "GET /documents should only return documents visible to Americas Employee (D-001, D-004).",
+      "priority": "P2",
+      "request": {
+        "headers": {
+          "X-User-Region": "Americas",
+          "X-User-Role": "Employee"
+        },
+        "body": {
+          "question": ""
+        }
+      },
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-001", "D-004"]
+      },
+      "relatedDefectId": "DEF-005"
+    }
+  ]
+}

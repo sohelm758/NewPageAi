@@ -1,0 +1,123 @@
+{
+  "category": "lifecycle-governance",
+  "description": "Golden test cases verifying lifecycle state enforcement (Spec Rule 2: Only Approved documents may surface; Draft, In Review, Retired must never appear)",
+  "testCases": [
+    {
+      "id": "TC-LIFE-001",
+      "category": "lifecycle",
+      "title": "Prohibit In-Review APAC Travel Policy from surfacing",
+      "description": "D-003 is In Review (JPY 8000). APAC users querying meal allowance must receive a refusal because no approved policy exists.",
+      "priority": "P0",
+      "region": "APAC",
+      "role": "Employee",
+      "question": "What is my daily meal allowance when I travel?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-003"],
+        "forbiddenKeywords": ["JPY 8000", "8,000", "JPY 8,000", "8000 JPY"],
+        "refusalMessageSubstring": "I do not have an approved document"
+      },
+      "relatedDefectId": "DEF-003"
+    },
+    {
+      "id": "TC-LIFE-002",
+      "category": "lifecycle",
+      "title": "Prohibit In-Review APAC Travel Policy under Manager role",
+      "description": "D-003 is In Review. Even Managers in APAC must not receive unapproved policy content.",
+      "priority": "P0",
+      "region": "APAC",
+      "role": "Manager",
+      "question": "What is the APAC meal allowance?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-003"],
+        "forbiddenKeywords": ["8000", "8,000", "JPY"]
+      },
+      "relatedDefectId": "DEF-003"
+    },
+    {
+      "id": "TC-LIFE-003",
+      "category": "lifecycle",
+      "title": "Enforce Approved Remote Work Policy (D-004) over Retired Policy (D-005)",
+      "description": "D-004 is Approved (up to 3 days/week) and supersedes D-005 (Retired, 1 day/week). The assistant must return 3 days and cite D-004.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "How many days a week can I work remotely?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-004"],
+        "forbiddenCitations": ["D-005"],
+        "expectedKeywords": ["3 days", "manager approval"],
+        "forbiddenKeywords": ["1 day per week", "up to 1 day"]
+      },
+      "relatedDefectId": "DEF-001"
+    },
+    {
+      "id": "TC-LIFE-004",
+      "category": "lifecycle",
+      "title": "Enforce Active Remote Work Policy for EMEA Manager",
+      "description": "Global remote work policy D-004 applies to EMEA Manager, must cite D-004 with 3 days/week.",
+      "priority": "P0",
+      "region": "EMEA",
+      "role": "Manager",
+      "question": "How many days can employees work from home?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-004"],
+        "forbiddenCitations": ["D-005"],
+        "expectedKeywords": ["3 days"]
+      },
+      "relatedDefectId": "DEF-001"
+    },
+    {
+      "id": "TC-LIFE-005",
+      "category": "lifecycle",
+      "title": "Prohibit Draft Vendor Onboarding Checklist (D-009) for EMEA Manager",
+      "description": "D-009 is Draft (EMEA Managers). Even though the user has matching Region (EMEA) and Role (Manager), draft content must never surface.",
+      "priority": "P0",
+      "region": "EMEA",
+      "role": "Manager",
+      "question": "What is the vendor onboarding checklist?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-009"],
+        "forbiddenKeywords": ["draft checklist", "onboarding new EMEA vendors"]
+      }
+    },
+    {
+      "id": "TC-LIFE-006",
+      "category": "lifecycle",
+      "title": "Prohibit Draft Vendor Onboarding Checklist for Non-Manager",
+      "description": "D-009 is both Draft and restricted to Managers. Employee querying it must be refused.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "How do I onboard a vendor in EMEA?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-009"]
+      }
+    },
+    {
+      "id": "TC-LIFE-007",
+      "category": "lifecycle",
+      "title": "Direct query for Retired 2023 edition (D-005) must not surface retired document",
+      "description": "User asks specifically about the retired 2023 policy. The assistant must not cite D-005 or validate retired terms.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What did the 2023 remote work policy say?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-005"]
+      },
+      "relatedDefectId": "DEF-001"
+    }
+  ]
+}

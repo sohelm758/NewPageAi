@@ -1,0 +1,137 @@
+{
+  "category": "regional-scoping",
+  "description": "Golden test cases verifying Regional Scoping (Spec Rule 1: A document may be used only if its region is Global or the user's region)",
+  "testCases": [
+    {
+      "id": "TC-REG-001",
+      "category": "region",
+      "title": "Americas Employee accesses Americas Travel Policy (D-001)",
+      "description": "Americas user queries meal allowance; D-001 is Approved, Region: Americas, Audience: All Staff.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is my daily meal allowance when I travel?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-001"],
+        "forbiddenCitations": ["D-002", "D-003"],
+        "expectedKeywords": ["USD 75", "25", "Americas"],
+        "forbiddenKeywords": ["EUR 60", "JPY 8000"]
+      }
+    },
+    {
+      "id": "TC-REG-002",
+      "category": "region",
+      "title": "Americas Employee queries receipt threshold in Americas (D-001)",
+      "description": "Americas user asks about receipt threshold for travel expenses.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the daily meal allowance when I travel?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-001"],
+        "expectedKeywords": ["USD 25", "25"]
+      }
+    },
+    {
+      "id": "TC-REG-003",
+      "category": "region",
+      "title": "EMEA Employee accesses EMEA Travel Policy (D-002)",
+      "description": "EMEA user queries meal allowance; D-002 is Approved, Region: EMEA, Audience: All Staff. Must cite D-002 and state EUR 60.",
+      "priority": "P0",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "What is my daily meal allowance when I travel?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-002"],
+        "forbiddenCitations": ["D-001", "D-003"],
+        "expectedKeywords": ["EUR 60", "30", "EMEA"],
+        "forbiddenKeywords": ["USD 75", "JPY"]
+      },
+      "relatedDefectId": "DEF-004"
+    },
+    {
+      "id": "TC-REG-004",
+      "category": "region",
+      "title": "EMEA user queries receipt threshold in EMEA (D-002)",
+      "description": "EMEA user queries receipt threshold; must return EUR 30 and cite D-002.",
+      "priority": "P1",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "When do I need a receipt for meal allowance?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-002"],
+        "forbiddenCitations": ["D-001"],
+        "expectedKeywords": ["EUR 30", "30"]
+      },
+      "relatedDefectId": "DEF-004"
+    },
+    {
+      "id": "TC-REG-005",
+      "category": "region",
+      "title": "APAC user cannot access Americas Travel Policy (D-001)",
+      "description": "APAC user meal allowance query must not fall back to Americas policy D-001.",
+      "priority": "P0",
+      "region": "APAC",
+      "role": "Employee",
+      "question": "What is my daily meal allowance when I travel?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-001", "D-002", "D-003"]
+      },
+      "relatedDefectId": "DEF-003"
+    },
+    {
+      "id": "TC-REG-006",
+      "category": "region",
+      "title": "Cross-Region Query: Americas user asking about EMEA policy",
+      "description": "Americas user requests EMEA travel allowance. Region scoping forbids serving D-002 to Americas user.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the EMEA travel meal allowance?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-002"]
+      },
+      "relatedDefectId": "DEF-004"
+    },
+    {
+      "id": "TC-REG-007",
+      "category": "region",
+      "title": "Cross-Region Query: EMEA user asking about Americas policy",
+      "description": "EMEA user requests Americas travel allowance. Region scoping forbids serving D-001 to EMEA user.",
+      "priority": "P1",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "What is the Americas travel meal allowance?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-001"]
+      },
+      "relatedDefectId": "DEF-004"
+    },
+    {
+      "id": "TC-REG-008",
+      "category": "region",
+      "title": "Global document (D-004) accessibility across all 3 regions",
+      "description": "Remote Work Policy (D-004) is Global; must be equally accessible to Americas, EMEA, and APAC.",
+      "priority": "P1",
+      "region": "APAC",
+      "role": "Employee",
+      "question": "How many days a week can I work remotely?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-004"],
+        "expectedKeywords": ["3 days"]
+      },
+      "relatedDefectId": "DEF-001"
+    }
+  ]
+}

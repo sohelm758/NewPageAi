@@ -1,0 +1,105 @@
+{
+  "category": "ui-query-interactions",
+  "description": "Golden test cases for Knowledge Assistant UI interactions, query submissions, graceful refusals, RBAC enforcement, and API response parity",
+  "layout": {
+    "headerTitle": "Knowledge Assistant",
+    "questionPlaceholder": "Ask a question, e.g. what is my meal allowance?",
+    "docsPanelHeading": "Documents visible to you"
+  },
+  "submissionCases": [
+    {
+      "id": "UI-QUERY-SUB-001",
+      "title": "should submit question via Ask button, transition through thinking state, and render answer with citations",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the daily meal allowance for travel in the US?",
+      "submitMethod": "button",
+      "expected": {
+        "keywords": ["75"],
+        "citations": ["D-001"]
+      }
+    },
+    {
+      "id": "UI-QUERY-SUB-002",
+      "title": "should submit question by pressing Enter in question input",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "What is the daily meal allowance for travel?",
+      "submitMethod": "enter",
+      "expected": {
+        "keywords": ["60"],
+        "minCitationsCount": 1
+      }
+    },
+    {
+      "id": "UI-QUERY-SUB-003",
+      "title": "should not trigger query when question input is empty",
+      "question": "   ",
+      "submitMethod": "button",
+      "expected": {
+        "isThinking": false
+      }
+    }
+  ],
+  "refusalCases": [
+    {
+      "id": "UI-QUERY-REF-001",
+      "title": "should render graceful refusal with 0 citation chips for unanswerable/out-of-scope question",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the company stock option vesting schedule?",
+      "expected": {
+        "refusalMessageSubstring": "i do not have an approved document",
+        "citationsCount": 0
+      }
+    },
+    {
+      "id": "UI-QUERY-REF-002",
+      "title": "should enforce RBAC refusal when Employee queries Engineering-restricted data",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "Can I copy production data locally?",
+      "expected": {
+        "refusalMessageSubstring": "i do not have an approved document",
+        "forbiddenCitations": ["D-006"],
+        "citationsCount": 0
+      }
+    }
+  ],
+  "roleQueryCases": [
+    {
+      "id": "UI-QUERY-ROLE-001",
+      "title": "should allow Engineering role to query Engineering-scoped document (D-006)",
+      "region": "Americas",
+      "role": "Engineering",
+      "question": "How should production data be handled?",
+      "expected": {
+        "keywords": ["sandbox", "production data must not be copied"],
+        "citations": ["D-006"]
+      }
+    },
+    {
+      "id": "UI-QUERY-ROLE-002",
+      "title": "should allow Finance role to query procurement thresholds (D-008)",
+      "region": "Americas",
+      "role": "Finance",
+      "question": "What are the procurement approval thresholds?",
+      "expected": {
+        "keywords": ["vp"],
+        "citations": ["D-008"]
+      }
+    }
+  ],
+  "apiParityCase": {
+    "id": "UI-QUERY-PARITY-001",
+    "title": "should verify UI renders exactly what POST /query API returns without data leakage",
+    "region": "Americas",
+    "role": "Employee",
+    "question": "What is the daily meal allowance for travel in the US?",
+    "expected": {
+      "status": 200,
+      "keys": ["answer", "citations"],
+      "forbiddenBodyStrings": ["CONFIDENTIAL", "INTERNAL_ERROR"]
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "description": "Master source of truth for all internal company documents in the Knowledge Assistant inventory",
+  "version": "1.0.0",
+  "documents": [
+    {
+      "doc_id": "D-001",
+      "title": "Travel and Expense Policy (Americas)",
+      "region": "Americas",
+      "audience": "All Staff",
+      "lifecycle_state": "Approved",
+      "last_updated": "2026-01-10",
+      "summary": "Americas meal allowance USD 75/day; receipts above USD 25",
+      "body": "Employees travelling within the Americas region may claim a daily meal allowance of USD 75. Receipts are required for any single expense above USD 25.",
+      "key_facts": [
+        "daily meal allowance of USD 75",
+        "Americas travel only",
+        "receipts required for single expense above USD 25"
+      ]
+    },
+    {
+      "doc_id": "D-002",
+      "title": "Travel and Expense Policy (EMEA)",
+      "region": "EMEA",
+      "audience": "All Staff",
+      "lifecycle_state": "Approved",
+      "last_updated": "2026-01-10",
+      "summary": "EMEA meal allowance EUR 60/day; receipts above EUR 30",
+      "body": "Employees travelling within the EMEA region may claim a daily meal allowance of EUR 60. Receipts are required for any single expense above EUR 30.",
+      "key_facts": [
+        "daily meal allowance of EUR 60",
+        "EMEA travel only",
+        "receipts required for single expense above EUR 30"
+      ]
+    },
+    {
+      "doc_id": "D-003",
+      "title": "Travel and Expense Policy (APAC)",
+      "region": "APAC",
+      "audience": "All Staff",
+      "lifecycle_state": "In Review",
+      "last_updated": "2026-02-01",
+      "summary": "Proposed APAC meal allowance JPY 8000/day (under review)",
+      "body": "A proposed daily meal allowance of JPY 8,000 for APAC travel. This policy is under review and has not yet been approved.",
+      "key_facts": [
+        "proposed meal allowance of JPY 8,000",
+        "APAC travel",
+        "under review / not approved"
+      ]
+    },
+    {
+      "doc_id": "D-004",
+      "title": "Remote Work Policy",
+      "region": "Global",
+      "audience": "All Staff",
+      "lifecycle_state": "Approved",
+      "supersedes": "D-005",
+      "last_updated": "2026-01-05",
+      "summary": "Up to 3 remote days/week with manager approval",
+      "body": "Employees may work remotely up to 3 days per week, subject to manager approval. Effective January 2026.",
+      "key_facts": [
+        "up to 3 days per week remote work",
+        "requires manager approval",
+        "effective January 2026",
+        "supersedes 2023 edition (D-005)"
+      ]
+    },
+    {
+      "doc_id": "D-005",
+      "title": "Remote Work Policy (2023 edition)",
+      "region": "Global",
+      "audience": "All Staff",
+      "lifecycle_state": "Retired",
+      "last_updated": "2023-03-01",
+      "summary": "Up to 1 remote day/week (superseded by D-004)",
+      "body": "Employees may work remotely up to 1 day per week. Superseded by the current Remote Work Policy (D-004).",
+      "key_facts": [
+        "1 remote day per week",
+        "retired / superseded"
+      ]
+    },
+    {
+      "doc_id": "D-006",
+      "title": "Production Data Handling Standard",
+      "region": "Global",
+      "audience": "Engineering",
+      "lifecycle_state": "Approved",
+      "last_updated": "2025-11-20",
+      "summary": "No local copies of production data; use approved sandbox",
+      "body": "Production data must not be copied to local machines. Use the approved data sandbox. Sandbox access requires team-lead approval.",
+      "key_facts": [
+        "must not copy production data to local machines",
+        "use approved data sandbox",
+        "sandbox access requires team-lead approval"
+      ]
+    },
+    {
+      "doc_id": "D-007",
+      "title": "Compensation Review Process",
+      "region": "Global",
+      "audience": "Managers",
+      "lifecycle_state": "Approved",
+      "last_updated": "2025-12-15",
+      "summary": "Q1 cycle; manager discretion budget 4% of team payroll",
+      "body": "The annual compensation review runs in Q1. Each manager has a discretionary budget of 4% of their team's payroll.",
+      "key_facts": [
+        "annual compensation review runs in Q1",
+        "discretionary budget is 4% of team payroll",
+        "restricted to managers only"
+      ]
+    },
+    {
+      "doc_id": "D-008",
+      "title": "Procurement Approval Thresholds",
+      "region": "Global",
+      "audience": "Finance",
+      "lifecycle_state": "Approved",
+      "last_updated": "2025-10-30",
+      "summary": "Above USD 10k VP sign-off; above USD 50k CFO sign-off",
+      "body": "Purchases above USD 10,000 require VP sign-off. Purchases above USD 50,000 require CFO sign-off.",
+      "key_facts": [
+        "purchases above USD 10,000 require VP sign-off",
+        "purchases above USD 50,000 require CFO sign-off",
+        "restricted to finance only"
+      ]
+    },
+    {
+      "doc_id": "D-009",
+      "title": "Vendor Onboarding Checklist (EMEA)",
+      "region": "EMEA",
+      "audience": "Managers",
+      "lifecycle_state": "Draft",
+      "last_updated": "2026-02-20",
+      "summary": "Draft EMEA vendor onboarding checklist (not approved)",
+      "body": "A draft checklist for onboarding new EMEA vendors. Not yet approved for use.",
+      "key_facts": [
+        "onboarding new EMEA vendors",
+        "draft / not approved"
+      ]
+    }
+  ],
+  "roleToAudienceMapping": {
+    "Employee": "All Staff",
+    "Engineering": "Engineering",
+    "Finance": "Finance",
+    "Manager": "Managers"
+  },
+  "lifecycleRules": {
+    "allowedState": "Approved",
+    "prohibitedStates": ["Draft", "In Review", "Retired"]
+  },
+  "regionRules": {
+    "universalRegion": "Global",
+    "scopedRegions": ["Americas", "EMEA", "APAC"]
+  }
+}

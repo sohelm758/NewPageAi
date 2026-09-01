@@ -1,0 +1,91 @@
+{
+  "category": "refusal-out-of-scope",
+  "description": "Golden test cases verifying Graceful Refusal & Out-of-Scope Handling (Spec Rule 4: If no approved, in-scope document covers the question, the assistant should say it does not have that information rather than guess)",
+  "testCases": [
+    {
+      "id": "TC-REF-001",
+      "category": "refusal",
+      "title": "Refusal on unrepresented company policy (Holiday calendar)",
+      "description": "Assistant must refuse queries regarding holiday schedules not present in document inventory.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the company holiday calendar for 2026?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "refusalMessageSubstring": "I do not have an approved document"
+      }
+    },
+    {
+      "id": "TC-REF-002",
+      "category": "refusal",
+      "title": "Refusal on unrepresented executive leadership questions",
+      "description": "Assistant must refuse queries about executive leadership not in document library.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "Who is the CEO of the company?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    },
+    {
+      "id": "TC-REF-003",
+      "category": "refusal",
+      "title": "Refusal on IT / Office infrastructure not in inventory",
+      "description": "Assistant must refuse questions about office Wi-Fi credentials.",
+      "priority": "P2",
+      "region": "EMEA",
+      "role": "Employee",
+      "question": "What is the guest Wi-Fi password in the London office?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    },
+    {
+      "id": "TC-REF-004",
+      "category": "refusal",
+      "title": "Refusal on external general knowledge questions",
+      "description": "Assistant is an internal policy bot, not a general chatbot; must refuse external geography questions.",
+      "priority": "P2",
+      "region": "APAC",
+      "role": "Employee",
+      "question": "What is the capital of Australia?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    },
+    {
+      "id": "TC-REF-005",
+      "category": "refusal",
+      "title": "Refusal on code generation / off-topic tasks",
+      "description": "Assistant must refuse programming tasks outside policy scope.",
+      "priority": "P2",
+      "region": "Americas",
+      "role": "Engineering",
+      "question": "Write a TypeScript function to reverse a binary tree.",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    },
+    {
+      "id": "TC-REF-006",
+      "category": "refusal",
+      "title": "Refusal on unrepresented benefits (401k / Pension)",
+      "description": "Assistant must refuse retirement benefits queries not covered in inventory.",
+      "priority": "P1",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "How does the 401k retirement match work?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": []
+      }
+    }
+  ]
+}

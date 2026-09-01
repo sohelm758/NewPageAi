@@ -1,0 +1,179 @@
+{
+  "category": "rbac-access-control",
+  "description": "Golden test cases verifying Role-Based Access Control (Spec Rule 1: A document may be used only if its audience is All Staff or matches the user's role)",
+  "testCases": [
+    {
+      "id": "TC-RBAC-001",
+      "category": "rbac",
+      "title": "Engineering role successfully accesses Production Data Handling (D-006)",
+      "description": "Engineering user queries production data handling; D-006 is Approved, Global, Audience: Engineering.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Engineering",
+      "question": "How should production data be handled?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-006"],
+        "expectedKeywords": ["sandbox", "team-lead approval", "must not be copied to local machines"]
+      }
+    },
+    {
+      "id": "TC-RBAC-002",
+      "category": "rbac",
+      "title": "Employee role forbidden from Production Data Handling (D-006)",
+      "description": "Employee role has audience 'All Staff'. D-006 is Engineering-only and must be refused.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "How should production data be handled?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-006"],
+        "forbiddenKeywords": ["sandbox", "team-lead approval"]
+      }
+    },
+    {
+      "id": "TC-RBAC-003",
+      "category": "rbac",
+      "title": "Finance role forbidden from Production Data Handling (D-006)",
+      "description": "Finance user queries production data; must be refused.",
+      "priority": "P0",
+      "region": "EMEA",
+      "role": "Finance",
+      "question": "Can I copy production data locally?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-006"]
+      }
+    },
+    {
+      "id": "TC-RBAC-004",
+      "category": "rbac",
+      "title": "Finance role successfully accesses Procurement Approval Thresholds (D-008)",
+      "description": "Finance user queries procurement thresholds; D-008 is Approved, Global, Audience: Finance.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Finance",
+      "question": "What are the procurement approval thresholds?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-008"],
+        "expectedKeywords": ["10000", "50000", "VP sign-off", "CFO sign-off"]
+      }
+    },
+    {
+      "id": "TC-RBAC-005",
+      "category": "rbac",
+      "title": "Employee role forbidden from Procurement Approval Thresholds (D-008)",
+      "description": "Employee user queries procurement thresholds; must be refused.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What are the procurement approval thresholds?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-008"],
+        "forbiddenKeywords": ["10,000", "50,000", "CFO"]
+      }
+    },
+    {
+      "id": "TC-RBAC-006",
+      "category": "rbac",
+      "title": "Engineering role forbidden from Procurement Approval Thresholds (D-008)",
+      "description": "Engineering user queries procurement thresholds; must be refused.",
+      "priority": "P0",
+      "region": "APAC",
+      "role": "Engineering",
+      "question": "What are the procurement approval thresholds?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-008"]
+      }
+    },
+    {
+      "id": "TC-RBAC-007",
+      "category": "rbac",
+      "title": "Manager role successfully accesses Compensation Review Process (D-007)",
+      "description": "Manager user queries compensation review; D-007 is Approved, Global, Audience: Managers.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Manager",
+      "question": "What is the compensation review process?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-007"],
+        "expectedKeywords": ["Q1", "4%", "discretionary budget"]
+      },
+      "relatedDefectId": "DEF-002"
+    },
+    {
+      "id": "TC-RBAC-008",
+      "category": "rbac",
+      "title": "Manager role queries discretionary budget details from D-007",
+      "description": "Manager user queries specific discretionary budget details in D-007.",
+      "priority": "P0",
+      "region": "EMEA",
+      "role": "Manager",
+      "question": "What is the manager discretionary budget for compensation?",
+      "expected": {
+        "shouldRefuse": false,
+        "expectedCitations": ["D-007"],
+        "expectedKeywords": ["4%", "payroll", "Q1"]
+      }
+    },
+    {
+      "id": "TC-RBAC-009",
+      "category": "rbac",
+      "title": "Employee role forbidden from Compensation Review Process (D-007)",
+      "description": "Confidential manager compensation review must not leak to Employee role.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Employee",
+      "question": "What is the compensation review process?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-007"],
+        "forbiddenKeywords": ["4%", "discretionary budget"]
+      },
+      "relatedDefectId": "DEF-002"
+    },
+    {
+      "id": "TC-RBAC-010",
+      "category": "rbac",
+      "title": "Engineering role forbidden from Compensation Discretionary Budget (D-007)",
+      "description": "Confidential manager discretionary budget must not leak to Engineering role.",
+      "priority": "P0",
+      "region": "Americas",
+      "role": "Engineering",
+      "question": "What is the discretionary budget for compensation review?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-007"],
+        "forbiddenKeywords": ["4%"]
+      },
+      "relatedDefectId": "DEF-002"
+    },
+    {
+      "id": "TC-RBAC-011",
+      "category": "rbac",
+      "title": "Finance role forbidden from Compensation Review Process (D-007)",
+      "description": "Finance user queries compensation review; must be refused.",
+      "priority": "P0",
+      "region": "APAC",
+      "role": "Finance",
+      "question": "What is the compensation review process?",
+      "expected": {
+        "shouldRefuse": true,
+        "expectedCitations": [],
+        "forbiddenCitations": ["D-007"]
+      },
+      "relatedDefectId": "DEF-002"
+    }
+  ]
+}
