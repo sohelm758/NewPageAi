@@ -16,6 +16,7 @@ on:
 
 env:
   BASE_URL: ${{ secrets.BASE_URL }}
+
 permissions:
   contents: write
 
@@ -39,7 +40,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -48,17 +49,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Create report name
+      - name: Create Report Name
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-
           REPORT_NAME="${TIMESTAMP}_${{ github.event.inputs.suite }}_run-${{ github.run_number }}"
 
           echo "REPORT_NAME=$REPORT_NAME" >> $GITHUB_ENV
 
-      - name: Run Playwright tests
-        env:
-          REPORT_NAME: ${{ env.REPORT_NAME }}
+      - name: Run Playwright Tests
         run: |
           case "${{ github.event.inputs.suite }}" in
             api)
@@ -75,7 +73,7 @@ jobs:
               ;;
           esac
 
-      - name: Upload Playwright artifact
+      - name: Upload Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -84,7 +82,7 @@ jobs:
           retention-days: 30
 
       #
-      # Get existing gh-pages content
+      # Checkout existing gh-pages
       #
       - name: Checkout gh-pages
         if: always()
@@ -95,62 +93,57 @@ jobs:
         continue-on-error: true
 
       #
+      # Build deployment folder
+      #
+      - name: Prepare Site
+        if: always()
+        run: |
+          mkdir -p site/reports
+
+          #
+          # Preserve existing site files
+          #
+          cp gh-pages/index.html site/index.html || true
+          cp gh-pages/reports.json site/reports.json || echo "[]" > site/reports.json
+
+          #
+          # Preserve historical reports
+          #
+          cp -R gh-pages/reports/* site/reports/ || true
+
+          #
+          # Add current report
+          #
+          cp -R "playwright-report/${REPORT_NAME}" "site/reports/${REPORT_NAME}"
+
+      #
       # Update reports.json
       #
       - name: Update reports.json
         if: always()
         run: |
-          mkdir -p gh-pages
-
-          if [ ! -f gh-pages/reports.json ]; then
-            echo "[]" > gh-pages/reports.json
-          fi
-
-          python3 - <<EOF
+          python3 <<EOF
           import json
 
-          report="${REPORT_NAME}"
+          report = "${REPORT_NAME}"
 
-          with open("gh-pages/reports.json","r") as f:
-              data=json.load(f)
+          with open("site/reports.json","r") as f:
+              reports = json.load(f)
 
-          if report not in data:
-              data.insert(0, report)
+          if report not in reports:
+              reports.insert(0, report)
 
-          with open("gh-pages/reports.json","w") as f:
-              json.dump(data, f, indent=2)
+          with open("site/reports.json","w") as f:
+              json.dump(reports, f, indent=2)
           EOF
 
       #
-      # Copy latest reports.json for deployment
+      # Single deployment
       #
-      - name: Prepare pages content
-        if: always()
-        run: |
-          cp gh-pages/reports.json ./reports.json
-
-      #
-      # Publish report into reports/<REPORT_NAME>
-      #
-      - name: Deploy Playwright Report
+      - name: Deploy GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./playwright-report/${{ env.REPORT_NAME }}
-          destination_dir: reports/${{ env.REPORT_NAME }}
-          keep_files: true
-
-      #
-      # Publish updated reports.json
-      #
-      - name: Deploy reports.json
-        if: always()
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: .
-          destination_dir: .
-          keep_files: true
+          publish_dir: ./site
