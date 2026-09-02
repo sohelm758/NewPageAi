@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewPage AI - Playwright Reports</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .report-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .report-item {
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1);
+        }
+
+        .report-item a {
+            text-decoration: none;
+            color: #0969da;
+            font-weight: 600;
+        }
+
+        .report-item a:hover {
+            text-decoration: underline;
+        }
+
+        .empty {
+            color: #666;
+        }
+
+        .loading {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 NewPage AI Playwright Reports</h1>
+
+    <p>
+        Historical Playwright execution reports published from GitHub Actions.
+    </p>
+
+    <div id="content" class="loading">
+        Loading reports...
+    </div>
+
+    <script>
+        async function loadReports() {
+            const content = document.getElementById('content');
+
+            try {
+                const response = await fetch('./reports.json');
+
+                if (!response.ok) {
+                    throw new Error('reports.json not found');
+                }
+
+                const reports = await response.json();
+
+                if (!reports.length) {
+                    content.innerHTML =
+                        '<p class="empty">No reports available.</p>';
+                    return;
+                }
+
+                reports.sort().reverse();
+
+                const html = `
+                    <ul class="report-list">
+                        ${reports.map(report => `
+                            <li class="report-item">
+                                <a href="./reports/${report}/index.html">
+                                    ${report}
+                                </a>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+
+                content.innerHTML = html;
+
+            } catch (err) {
+                content.innerHTML = `
+                    <p class="empty">
+                        Unable to load reports.json
+                    </p>
+                `;
+                console.error(err);
+            }
+        }
+
+        loadReports();
+    </script>
+
+</body>
+</html>
