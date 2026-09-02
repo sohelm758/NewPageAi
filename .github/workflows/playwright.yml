@@ -1,0 +1,153 @@
+name: NewPage AI - Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Test suite to run"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - api
+          - ui-query
+          - ui-documents
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Run Playwright Tests
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 60
+
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
+
+    env:
+      CI: true
+      BASE_URL: ${{ secrets.BASE_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create report name
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+
+          REPORT_NAME="${TIMESTAMP}_${{ github.event.inputs.suite }}_run-${{ github.run_number }}"
+
+          echo "REPORT_NAME=$REPORT_NAME" >> $GITHUB_ENV
+
+      - name: Run Playwright tests
+        env:
+          REPORT_NAME: ${{ env.REPORT_NAME }}
+        run: |
+          case "${{ github.event.inputs.suite }}" in
+            api)
+              npx playwright test src/tests/api/api.spec.ts
+              ;;
+            ui-query)
+              npx playwright test src/tests/ui/query.spec.ts
+              ;;
+            ui-documents)
+              npx playwright test src/tests/ui/documents-visible.spec.ts
+              ;;
+            *)
+              npx playwright test
+              ;;
+          esac
+
+      - name: Upload Playwright artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      #
+      # Get existing gh-pages content
+      #
+      - name: Checkout gh-pages
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      #
+      # Update reports.json
+      #
+      - name: Update reports.json
+        if: always()
+        run: |
+          mkdir -p gh-pages
+
+          if [ ! -f gh-pages/reports.json ]; then
+            echo "[]" > gh-pages/reports.json
+          fi
+
+          python3 - <<EOF
+          import json
+
+          report="${REPORT_NAME}"
+
+          with open("gh-pages/reports.json","r") as f:
+              data=json.load(f)
+
+          if report not in data:
+              data.insert(0, report)
+
+          with open("gh-pages/reports.json","w") as f:
+              json.dump(data, f, indent=2)
+          EOF
+
+      #
+      # Copy latest reports.json for deployment
+      #
+      - name: Prepare pages content
+        if: always()
+        run: |
+          cp gh-pages/reports.json ./reports.json
+
+      #
+      # Publish report into reports/<REPORT_NAME>
+      #
+      - name: Deploy Playwright Report
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./playwright-report/${{ env.REPORT_NAME }}
+          destination_dir: reports/${{ env.REPORT_NAME }}
+          keep_files: true
+
+      #
+      # Publish updated reports.json
+      #
+      - name: Deploy reports.json
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .
+          destination_dir: .
+          keep_files: true
